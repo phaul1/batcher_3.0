@@ -37,14 +37,14 @@ echo
 echo_blue_bold "Enter source contract address:"
 read sourceContractAddress
 echo
-echo_blue_bold "Enter transaction data (in hex):"
-read transactionData
+echo_blue_bold "Enter source transaction data (in hex):"
+read sourceTransactionData
 echo
-echo_blue_bold "Enter gas limit:"
-read gasLimit
+echo_blue_bold "Enter gas limit for source transaction:"
+read sourceGasLimit
 echo
-echo_blue_bold "Enter gas price (in gwei):"
-read gasPrice
+echo_blue_bold "Enter gas price for source transaction (in gwei):"
+read sourceGasPrice
 echo
 echo_blue_bold "Enter number of transactions to send:"
 read numberOfTransactions
@@ -54,6 +54,15 @@ read destinationProviderURL
 echo
 echo_blue_bold "Enter destination contract address:"
 read destinationContractAddress
+echo
+echo_blue_bold "Enter destination transaction data (in hex):"
+read destinationTransactionData
+echo
+echo_blue_bold "Enter gas limit for destination transaction:"
+read destinationGasLimit
+echo
+echo_blue_bold "Enter gas price for destination transaction (in gwei):"
+read destinationGasPrice
 echo
 
 if ! npm list -g ethers@5.5.4 >/dev/null 2>&1; then
@@ -78,12 +87,17 @@ const sourcePrivateKey = "${sourcePrivateKey}";
 const sourceContractAddress = "${sourceContractAddress}";
 const destinationContractAddress = "${destinationContractAddress}";
 
-const transactionData = "${transactionData}";
-const gasLimit = "${gasLimit}";
-const gasPrice = "${gasPrice}";
+const sourceTransactionData = "${sourceTransactionData}";
+const sourceGasLimit = "${sourceGasLimit}";
+const sourceGasPrice = "${sourceGasPrice}";
+
+const destinationTransactionData = "${destinationTransactionData}";
+const destinationGasLimit = "${destinationGasLimit}";
+const destinationGasPrice = "${destinationGasPrice}";
+
 const numberOfTransactions = ${numberOfTransactions};
 
-async function sendTransaction(wallet, contractAddress, txData) {
+async function sendTransaction(wallet, contractAddress, txData, gasLimit, gasPrice) {
     const tx = {
         to: contractAddress,
         value: 0,
@@ -110,8 +124,8 @@ async function main() {
 
     for (let i = 0; i < numberOfTransactions; i++) {
         console.log("Sending bridging transaction", i + 1, "of", numberOfTransactions);
-        await sendTransaction(sourceWallet, sourceContractAddress, transactionData);
-        await sendTransaction(destinationWallet, destinationContractAddress, transactionData);
+        await sendTransaction(sourceWallet, sourceContractAddress, sourceTransactionData, sourceGasLimit, sourceGasPrice);
+        await sendTransaction(destinationWallet, destinationContractAddress, destinationTransactionData, destinationGasLimit, destinationGasPrice);
     }
 }
 
