@@ -96,9 +96,11 @@ async function sendTransaction(wallet, contractAddress, txData) {
         const transactionResponse = await wallet.sendTransaction(tx);
         console.log("\033[1;35mTx Hash:\033[0m", transactionResponse.hash);
         const receipt = await transactionResponse.wait();
+        console.log("Transaction successful with receipt:", receipt);
         console.log("");
     } catch (error) {
         console.error("Error sending transaction:", error);
+        console.error("Transaction details:", tx);
     }
 }
 
